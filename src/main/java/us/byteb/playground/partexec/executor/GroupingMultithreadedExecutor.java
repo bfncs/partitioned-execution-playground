@@ -10,12 +10,11 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GroupingMultithreadedExecutor implements Executor {
   final ExecutorService executorService = new ForkJoinPool(8);
-
-  public GroupingMultithreadedExecutor() {}
 
   @Override
   public void execute(
@@ -48,6 +47,21 @@ public class GroupingMultithreadedExecutor implements Executor {
       Thread.currentThread().interrupt();
     } catch (ExecutionException e) {
       throw new IllegalStateException(e.getCause());
+    }
+  }
+
+  @Override
+  public void close() throws Exception {
+    executorService.shutdown(); // Disable new tasks from being submitted
+    try {
+      if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+        executorService.shutdownNow();
+        if (!executorService.awaitTermination(5, TimeUnit.SECONDS))
+          System.err.println("Pool did not terminate");
+      }
+    } catch (InterruptedException ie) {
+      executorService.shutdownNow();
+      Thread.currentThread().interrupt();
     }
   }
 }

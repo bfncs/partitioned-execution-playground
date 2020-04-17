@@ -16,29 +16,24 @@ public class App {
   }
 
   private static void benchmark(final Class<? extends Executor> executorClass) {
-    final Executor executor;
-    try {
-      executor = executorClass.newInstance();
-    } catch (Exception e) {
-      throw new IllegalStateException(e);
-    }
-
     final MessageProducer producer = new MessageProducer(NUM_SOURCES);
     final MessageProcessor processor = new MessageProcessor();
     final MessageConsumer consumer = new MessageConsumer();
 
-    final long startTime = System.nanoTime();
-    executor.execute(producer, processor, consumer, NUM_BATCHES, BATCH_SIZE);
-    final long endTime = System.nanoTime();
+    try (final Executor executor = executorClass.newInstance()) {
+      final long startTime = System.nanoTime();
+      executor.execute(producer, processor, consumer, NUM_BATCHES, BATCH_SIZE);
+      final long endTime = System.nanoTime();
+      final float durationMs = (endTime - startTime) / 1000000.0f;
+      System.out.printf("%s done in %.3fms%n", executorClass.getSimpleName(), durationMs);
+    } catch (Exception e) {
+      throw new IllegalStateException(e);
+    }
 
     if (!producer.getSourceStates().equals(consumer.getSourceStates())) {
       System.out.println("Final producer state: " + producer.getSourceStates());
       System.out.println("Final consumer state: " + consumer.getSourceStates());
       throw new IllegalStateException("Final producer and consumer states are not equal!");
     }
-
-    final float durationMs = (endTime - startTime) / 1000000.0f;
-    System.out.printf("%s done in %.3fms%n", executorClass.getSimpleName(), durationMs);
   }
-
 }

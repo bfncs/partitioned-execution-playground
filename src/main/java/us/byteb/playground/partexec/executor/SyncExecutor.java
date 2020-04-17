@@ -10,14 +10,19 @@ import java.util.List;
 public class SyncExecutor implements Executor {
   @Override
   public void execute(
-          final MessageProducer producer,
-          final MessageProcessor processor,
-          final MessageConsumer consumer,
-          final int numBatches,
-          final int batchSize) {
+      final MessageProducer producer,
+      final MessageProcessor processor,
+      final MessageConsumer consumer,
+      final int numBatches,
+      final int batchSize) {
     for (int i = 0; i < numBatches; i++) {
       final List<Message> messages = producer.nextBatch(batchSize);
       consumer.consumeBatch(messages, processor::process);
     }
+  }
+
+  @Override
+  public void close() throws Exception {
+    // nothing to clean up
   }
 }

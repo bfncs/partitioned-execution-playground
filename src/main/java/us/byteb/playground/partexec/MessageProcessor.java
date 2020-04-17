@@ -8,8 +8,13 @@ public class MessageProcessor {
     private final Random random = new Random();
 
     public void process(final Message message) {
+        // We emulate the non-equal distribution of delay between sources by
+        // adding the source index to the delay.
+        final int sourceDelayMs = message.getSource() % MAX_DELAY_MS / 2;
+        final long delayMs = random.nextInt(MAX_DELAY_MS / 2) + sourceDelayMs;
+
         try {
-            Thread.sleep(random.nextInt(MAX_DELAY_MS));
+            Thread.sleep(delayMs);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

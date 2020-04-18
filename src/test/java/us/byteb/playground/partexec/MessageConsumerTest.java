@@ -16,7 +16,7 @@ class MessageConsumerTest {
         () -> {
           final List<Message> messages =
               buildMessageBatch(1, 0, 10);
-          new MessageConsumer().consumeBatch(messages);
+          new MessageConsumer().consumeBatch(messages, msg -> {});
         });
   }
 

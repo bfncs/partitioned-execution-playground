@@ -25,7 +25,9 @@ public class App {
       executor.execute(producer, processor, consumer, NUM_BATCHES, BATCH_SIZE);
       final long endTime = System.nanoTime();
       final float durationMs = (endTime - startTime) / 1000000.0f;
-      System.out.printf("%s done in %.3fms%n", executorClass.getSimpleName(), durationMs);
+      System.out.printf(
+          "%s done in %.3fms (total execution time %dms)%n",
+          executorClass.getSimpleName(), durationMs, processor.getTotalExecutionTime());
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }

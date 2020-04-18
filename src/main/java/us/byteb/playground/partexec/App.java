@@ -5,6 +5,8 @@ import us.byteb.playground.partexec.executor.GroupingMultithreadedExecutor;
 import us.byteb.playground.partexec.executor.PartitionedQueueExecutor;
 import us.byteb.playground.partexec.executor.SyncExecutor;
 
+import java.util.Collections;
+
 public class App {
 
     private static final int NUM_BATCHES = 10;
@@ -32,8 +34,11 @@ public class App {
 
         final float durationMs = (System.nanoTime() - startTime) / 1000000.0f;
         System.out.printf(
-                "%s done in %.3fms (total execution time %dms)%n",
-                executorClass.getSimpleName(), durationMs, processor.getTotalExecutionTime());
+                "%s done in %.3fms (total execution %dms, max. single source %dms)%n",
+                executorClass.getSimpleName(),
+                durationMs,
+                processor.getExecutionTimes().values().stream().mapToLong(Long::longValue).sum(),
+                Collections.max(processor.getExecutionTimes().values()));
 
         if (!producer.getSourceStates().equals(consumer.getSourceStates())) {
             System.out.println("Final producer state: " + producer.getSourceStates());

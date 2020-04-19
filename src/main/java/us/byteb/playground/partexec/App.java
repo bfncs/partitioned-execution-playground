@@ -10,8 +10,8 @@ import java.util.Collections;
 public class App {
 
     private static final int NUM_BATCHES = 10;
-    private static final int BATCH_SIZE = 100;
-    private static final int NUM_SOURCES = 16;
+    private static final int BATCH_SIZE = 512;
+    private static final int NUM_SOURCES = 128;
 
     public static void main(String[] args) throws InterruptedException {
         benchmark(SyncExecutor.class);

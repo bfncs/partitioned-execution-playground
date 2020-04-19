@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class MessageProcessor {
 
-    private static final int MAX_DELAY_MS = 10;
+    private static final int MAX_DELAY_MS = 20;
     private final Random random = new Random();
     Map<Integer, Long> executionTimes = new HashMap<>();
 

@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 public class PartitionedQueueExecutor implements Executor {
 
     public static final int POLL_TIMEOUT_MS = 10;
-    private static final int PARTITION_COUNT = 16;
+    private static final int PARTITION_COUNT = 32;
     final AtomicBoolean stopExecution = new AtomicBoolean(false);
     final CountDownLatch finishedCountdown = new CountDownLatch(PARTITION_COUNT);
     final List<BlockingQueue<Runnable>> queues;

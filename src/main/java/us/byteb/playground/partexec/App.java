@@ -14,9 +14,9 @@ public class App {
     private static final int NUM_SOURCES = 128;
 
     public static void main(String[] args) throws InterruptedException {
-        benchmark(SyncExecutor.class);
-        benchmark(GroupingMultithreadedExecutor.class);
         benchmark(PartitionedQueueExecutor.class);
+        benchmark(GroupingMultithreadedExecutor.class);
+        benchmark(SyncExecutor.class);
     }
 
     private static void benchmark(final Class<? extends Executor> executorClass) {

@@ -3,12 +3,13 @@ package us.byteb.playground.partexec;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageProcessor {
 
     private static final int MAX_DELAY_MS = 20;
     private final Random random = new Random();
-    Map<Integer, Long> executionTimes = new HashMap<>();
+    Map<Integer, Long> executionTimes = new ConcurrentHashMap<>();
 
     public void process(final Message message) {
         // We emulate the non-equal distribution of delay between sources by

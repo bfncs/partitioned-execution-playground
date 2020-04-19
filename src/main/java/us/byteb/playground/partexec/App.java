@@ -17,6 +17,8 @@ public class App {
         benchmark(PartitionedQueueExecutor.class);
         benchmark(GroupingMultithreadedExecutor.class);
         benchmark(SyncExecutor.class);
+
+        // TODO: benchmark with https://github.com/LMAX-Exchange/disruptor
     }
 
     private static void benchmark(final Class<? extends Executor> executorClass) {

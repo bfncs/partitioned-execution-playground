@@ -21,10 +21,14 @@ public class GroupingMultithreadedExecutor implements Executor {
       final MessageProducer producer,
       final MessageProcessor processor,
       final MessageConsumer consumer,
-      final int numBatches,
+      final int totalMessages,
       final int batchSize) {
-    for (int i = 0; i < numBatches; i++) {
+    final int numBatches = totalMessages / batchSize;
+
+    int messagesReceived = 0;
+    while (messagesReceived < totalMessages) {
       final List<Message> messages = producer.nextBatch(batchSize);
+      messagesReceived += messages.size();
       executeBlockingWithOwnExecutorService(
           () -> {
             final Map<Integer, List<Message>> messagesBySource =

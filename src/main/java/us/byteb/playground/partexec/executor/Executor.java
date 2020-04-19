@@ -9,6 +9,6 @@ public interface Executor extends AutoCloseable {
       MessageProducer producer,
       MessageProcessor processor,
       MessageConsumer consumer,
-      int numBatches,
+      int totalMessages,
       int batchSize);
 }

@@ -62,10 +62,12 @@ public class PartitionedQueueExecutor implements Executor {
             final MessageProducer producer,
             final MessageProcessor processor,
             final MessageConsumer consumer,
-            final int numBatches,
+            final int totalMessages,
             final int batchSize) {
-        for (int i = 0; i < numBatches; i++) {
+        int messagesReceived = 0;
+        while (messagesReceived < totalMessages) {
             final List<Message> messages = producer.nextBatch(batchSize);
+            messagesReceived += messages.size();
             messages.forEach(
                     message -> {
                         final int partition = getPartition(Integer.toString(message.getSource()));

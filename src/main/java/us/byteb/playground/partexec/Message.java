@@ -8,6 +8,7 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 public class Message {
   private final int source;
   private final int value;
+  private final long created = System.nanoTime();
 
   public Message(final int source, final int value) {
     this.source = source;
@@ -20,6 +21,10 @@ public class Message {
 
   public int getValue() {
     return value;
+  }
+
+  public long getCreated() {
+    return created;
   }
 
   @Override

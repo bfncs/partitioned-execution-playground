@@ -30,7 +30,7 @@ public class App {
         final MessageConsumer consumer = new MessageConsumer();
 
         final long startTime;
-        try (final Executor executor = executorClass.newInstance()) {
+        try (final Executor executor = executorClass.getConstructor().newInstance()) {
             startTime = System.nanoTime();
             executor.execute(producer, processor, consumer, numMessages, BATCH_SIZE);
         } catch (Exception e) {

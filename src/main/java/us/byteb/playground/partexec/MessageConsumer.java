@@ -21,6 +21,7 @@ public class MessageConsumer {
         final int source = message.getSource();
         final int newValue = message.getValue();
 
+        // TODO: verify after completion
         final Integer oldValue = sourceStates.get(source);
         if (oldValue == null) {
             if (newValue != 0) {

@@ -2,10 +2,7 @@ package us.byteb.playground.partexec;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import us.byteb.playground.partexec.executor.Executor;
-import us.byteb.playground.partexec.executor.GroupingMultithreadedExecutor;
-import us.byteb.playground.partexec.executor.PartitionedQueueExecutor;
-import us.byteb.playground.partexec.executor.SyncExecutor;
+import us.byteb.playground.partexec.executor.*;
 
 import java.util.Collection;
 
@@ -16,6 +13,7 @@ public class App {
     private static final int NUM_SOURCES = 128;
 
     public static void main(String[] args) {
+        benchmark(LockingPoolExecutor.class);
         benchmark(PartitionedQueueExecutor.class);
         benchmark(GroupingMultithreadedExecutor.class);
         benchmark(SyncExecutor.class);

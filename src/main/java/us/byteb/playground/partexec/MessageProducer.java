@@ -3,13 +3,14 @@ package us.byteb.playground.partexec;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MessageProducer {
 
     private final BlockingQueue<Message> queue = new LinkedBlockingQueue<>();
-    private final Map<Integer, Integer> sourceStates = new HashMap<>();
+    private final Map<Integer, Integer> sourceStates = new ConcurrentHashMap<>();
     private final AtomicReference<Long> durationNs = new AtomicReference<>(null);
 
     public MessageProducer(final int numSources, final int numMessages) {

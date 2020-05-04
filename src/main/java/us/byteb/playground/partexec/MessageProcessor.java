@@ -7,15 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageProcessor {
 
+    private static final int MIN_DELAY_MS = 2;
     private static final int MAX_DELAY_MS = 20;
     private final Random random = new Random();
     Map<Integer, Long> executionTimes = new ConcurrentHashMap<>();
 
     public void process(final Message message) {
-        // We emulate the non-equal distribution of delay between sources by
-        // adding the source index to the delay.
-        final int sourceDelayMs = message.getSource() % MAX_DELAY_MS / 2;
-        final long delayMs = random.nextInt(MAX_DELAY_MS / 2) + sourceDelayMs;
+        final long delayMs = MIN_DELAY_MS + random.nextInt(MAX_DELAY_MS - MIN_DELAY_MS);
         executionTimes.compute(message.getSource(), (source, acc) -> (acc == null ? 0 : acc) + delayMs);
 
         try {

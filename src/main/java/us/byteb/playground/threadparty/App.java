@@ -13,7 +13,7 @@ public class App {
     private static final int NUM_SOURCES = 128;
 
     public static void main(String[] args) {
-        benchmark(LockingPoolExecutor.class);
+        benchmark(KeyedLockExecutor.class);
         benchmark(PartitionedQueueExecutor.class);
         benchmark(GroupingMultithreadedExecutor.class);
         benchmark(SyncExecutor.class);

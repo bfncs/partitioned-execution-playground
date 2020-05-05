@@ -13,12 +13,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class LockingPoolExecutor implements Executor {
 
-    public static final int NUM_WORKER_THREADS = 32;
+    public static final int NUM_WORKER_THREADS = 16;
     public static final int POLL_TIMEOUT_MS = 10;
-    final AtomicBoolean stopExecution = new AtomicBoolean(false);
-    final CountDownLatch finishedCountdown = new CountDownLatch(NUM_WORKER_THREADS);
-    final List<Message> queue = Collections.synchronizedList(new LinkedList<>());
-    final Set<Integer> lockedSources = ConcurrentHashMap.newKeySet();
+
+    private final AtomicBoolean stopExecution = new AtomicBoolean(false);
+    private final CountDownLatch finishedCountdown = new CountDownLatch(NUM_WORKER_THREADS);
+    private final List<Message> queue = Collections.synchronizedList(new LinkedList<>());
+    private final Set<Integer> lockedSources = ConcurrentHashMap.newKeySet();
     private final ReentrantLock lock = new ReentrantLock();
 
     @Override
@@ -34,14 +35,20 @@ public class LockingPoolExecutor implements Executor {
                 while (true) {
                     final Message message = getNextMessage();
                     if (message != null) {
-                        consumer.consume(message, processor::process);
-                        lockedSources.removeIf(s -> s == message.getSource());
+                        try {
+                            consumer.consume(message, processor::process);
+                        } catch (Exception e) {
+                            System.out.printf("Error consuming message (%s): %s%n", message, e);
+                        } finally {
+                            lockedSources.removeIf(s -> s == message.getSource());
+                        }
                     } else {
                         if (stopExecution.get()) {
                             finishedCountdown.countDown();
                             return;
                         } else {
                             try {
+                                // TODO: implement without busy waiting
                                 Thread.sleep(POLL_TIMEOUT_MS);
                             } catch (InterruptedException e) {
                                 Thread.currentThread().interrupt();
@@ -65,10 +72,12 @@ public class LockingPoolExecutor implements Executor {
 
     private Message getNextMessage() {
         lock.lock();
+        final Set<Integer> lockedSourcesSnapshot = new HashSet<>(lockedSources);
+
         Message message = null;
         for (int i = 0; i < queue.size(); i++) {
             final Message msg = queue.get(i);
-            if (!lockedSources.contains(msg.getSource())) {
+            if (!lockedSourcesSnapshot.contains(msg.getSource())) {
                 queue.remove(i);
                 lockedSources.add(msg.getSource());
                 message = msg;

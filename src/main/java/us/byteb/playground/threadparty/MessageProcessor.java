@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MessageProcessor {
 
     private static final int MIN_DELAY_MS = 2;
-    private static final int MAX_DELAY_MS = 20;
+    private static final int MAX_DELAY_MS = 25;
     private final Random random = new Random();
     Map<Integer, Long> executionTimes = new ConcurrentHashMap<>();
 

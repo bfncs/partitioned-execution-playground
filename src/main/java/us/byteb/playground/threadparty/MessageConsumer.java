@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import static java.text.MessageFormat.format;
 
 public class MessageConsumer {
-    private final Map<Integer, Integer> sourceStates = new HashMap<>();
+    private final Map<Integer, Integer> sourceStates = new ConcurrentHashMap<>();
     private final List<Long> latencies = new ArrayList<>();
 
     public void consumeBatch(List<Message> messages, final Consumer<Message> processor) {

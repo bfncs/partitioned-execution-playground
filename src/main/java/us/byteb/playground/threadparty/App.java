@@ -1,8 +1,8 @@
-package us.byteb.playground.partexec;
+package us.byteb.playground.threadparty;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import us.byteb.playground.partexec.executor.*;
+import us.byteb.playground.threadparty.executor.*;
 
 import java.util.Collection;
 

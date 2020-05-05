@@ -1,6 +1,5 @@
-package us.byteb.playground.partexec;
+package us.byteb.playground.threadparty;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;

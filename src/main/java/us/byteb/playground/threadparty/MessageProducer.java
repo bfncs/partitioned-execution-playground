@@ -1,4 +1,4 @@
-package us.byteb.playground.partexec;
+package us.byteb.playground.threadparty;
 
 import java.time.Duration;
 import java.util.*;

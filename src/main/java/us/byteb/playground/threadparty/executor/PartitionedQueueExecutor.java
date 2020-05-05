@@ -1,9 +1,9 @@
-package us.byteb.playground.partexec.executor;
+package us.byteb.playground.threadparty.executor;
 
-import us.byteb.playground.partexec.Message;
-import us.byteb.playground.partexec.MessageConsumer;
-import us.byteb.playground.partexec.MessageProcessor;
-import us.byteb.playground.partexec.MessageProducer;
+import us.byteb.playground.threadparty.Message;
+import us.byteb.playground.threadparty.MessageConsumer;
+import us.byteb.playground.threadparty.MessageProcessor;
+import us.byteb.playground.threadparty.MessageProducer;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;

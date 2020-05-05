@@ -22,7 +22,7 @@ public class KeyedLockExecutor implements Executor {
   public static final int NUM_WORKER_THREADS = 32;
   public static final int POLL_TIMEOUT_MS = 10;
 
-  private final KeyedLockQueue<Message, Integer> q = new KeyedLockQueue<>(Message::getSource);
+  private final KeyedLockQueue<Message, Integer> queue = new KeyedLockQueue<>(Message::getSource);
   private final AtomicBoolean stopExecution = new AtomicBoolean(false);
   private final CountDownLatch finishedCountdown = new CountDownLatch(NUM_WORKER_THREADS);
 
@@ -37,7 +37,7 @@ public class KeyedLockExecutor implements Executor {
     for (int i = 0; i < NUM_WORKER_THREADS; i++) {
       final Thread worker = new Thread(() -> {
         while (true) {
-          final boolean didProcess = q
+          final boolean didProcess = queue
               .processNext(message -> consumer.consume(message, processor::process));
           if (!didProcess) {
             if (stopExecution.get()) {
@@ -61,7 +61,7 @@ public class KeyedLockExecutor implements Executor {
     while (messagesReceived < totalMessages) {
       final List<Message> messages = producer.nextBatch(batchSize);
       messagesReceived += messages.size();
-      q.addAll(messages);
+      queue.addAll(messages);
     }
 
     stopExecutionGracefully();

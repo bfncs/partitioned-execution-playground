@@ -117,19 +117,19 @@ public class KeyedLockExecutor implements Executor {
       final Set<K> lockedSourcesSnapshot = new HashSet<>(lockedKeys);
 
       T result = null;
-      for (int i = 0; i < items.size(); i++) {
-        try {
-          final T item = items.get(i);
-          final K key = keyAccessor.apply(item);
-          if (!lockedSourcesSnapshot.contains(key)) {
-            items.remove(i);
-            lockedKeys.add(key);
-            result = item;
-            break;
-          }
-        } catch (IndexOutOfBoundsException e) {
-          break;
+      try {
+        for (int i = 0; i < items.size(); i++) {
+            final T item = items.get(i);
+            final K key = keyAccessor.apply(item);
+            if (!lockedSourcesSnapshot.contains(key)) {
+              items.remove(i);
+              lockedKeys.add(key);
+              result = item;
+              break;
+            }
         }
+      } catch (IndexOutOfBoundsException e) {
+        // desired item was removed, do nothing
       }
 
       nextItemLock.unlock();
